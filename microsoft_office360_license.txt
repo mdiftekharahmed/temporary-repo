@@ -1,0 +1,1136 @@
+SIGNAL PROCESSING LAB — STANDALONE COPY-PASTE CODES
+
+HOW TO RUN
+
+PYTHON: 1. Install Python 3. 2. Install the two required packages once:
+python -m pip install numpy matplotlib (On some Linux systems use:
+python3 -m pip install –user numpy matplotlib) 3. Copy ONE complete
+Python program into a file, for example exp1.py. 4. Run it with: python
+exp1.py
+
+Each Python program below includes its own imports. No external data
+files are needed.
+
+MATLAB: 1. Open MATLAB. 2. Copy ONE complete MATLAB program into a new
+script. 3. Save it, for example exp1.m, and press Run. All MATLAB
+programs use standard MATLAB functions and need no extra toolbox.
+
+IMPORTANT: - Run one experiment at a time. Do not paste multiple
+programs into the same script. - Python uses zero-based indexing; MATLAB
+uses one-based indexing. - Continuous-time signals are represented
+numerically using closely spaced samples. - An ideal impulse cannot be
+drawn exactly by a computer; the programs use a unit-area approximation.
+
+================================================== EXPERIMENT 1 —
+CONTINUOUS-TIME SIGNAL GENERATION
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Signal 1: y(t) = cos(t)
+    t1 = np.linspace(0, 10, 1000)
+    y1 = np.cos(t1)
+
+    # Signal 2: y(t) = 3cos(3*pi*t + pi/3), four periods
+    T = 2 / 3
+    t2 = np.linspace(0, 4*T, 1000)
+    y2 = 3 * np.cos(3 * np.pi * t2 + np.pi / 3)
+
+    # Signal 3: y(t) = 2e^(-0.9t)
+    t3 = np.linspace(0, 10, 1000)
+    y3 = 2 * np.exp(-0.9 * t3)
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(3, 1, 1)
+    plt.plot(t1, y1)
+    plt.title("Signal 1: cos(t)")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 2)
+    plt.plot(t2, y2)
+    plt.title("Signal 2: 3cos(3*pi*t + pi/3)")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.plot(t3, y3)
+    plt.title("Signal 3: 2exp(-0.9t)")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    % Signal 1: y(t) = cos(t)
+    t1 = linspace(0,10,1000);
+    y1 = cos(t1);
+
+    % Signal 2: four periods
+    T = 2/3;
+    t2 = linspace(0,4*T,1000);
+    y2 = 3*cos(3*pi*t2 + pi/3);
+
+    % Signal 3: y(t) = 2e^(-0.9t)
+    t3 = linspace(0,10,1000);
+    y3 = 2*exp(-0.9*t3);
+
+    figure;
+
+    subplot(3,1,1);
+    plot(t1,y1);
+    title('Signal 1: cos(t)');
+    xlabel('Time (s)');
+    ylabel('Amplitude');
+    grid on;
+
+    subplot(3,1,2);
+    plot(t2,y2);
+    title('Signal 2: 3cos(3*pi*t + pi/3)');
+    xlabel('Time (s)');
+    ylabel('Amplitude');
+    grid on;
+
+    subplot(3,1,3);
+    plot(t3,y3);
+    title('Signal 3: 2exp(-0.9t)');
+    xlabel('Time (s)');
+    ylabel('Amplitude');
+    grid on;
+
+================================================== EXPERIMENT 2 —
+CONTINUOUS-TIME BASIC SIGNALS
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    t = np.linspace(-5, 5, 1001)
+    dt = t[1] - t[0]
+
+    # Unit step
+    unit_step = np.where(t >= 0, 1.0, 0.0)
+
+    # Unit impulse approximation with area approximately equal to 1
+    unit_impulse = np.zeros_like(t)
+    zero_index = np.argmin(np.abs(t))
+    unit_impulse[zero_index] = 1.0 / dt
+
+    # Ramp
+    ramp = np.maximum(t, 0)
+
+    # Periodic sinusoidal signal, frequency = 1 Hz
+    sinusoid = np.sin(2 * np.pi * t)
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(4, 1, 1)
+    plt.plot(t, unit_step)
+    plt.title("Continuous-Time Unit Step")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 2)
+    plt.plot(t, unit_impulse)
+    plt.title("Unit Impulse Approximation")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 3)
+    plt.plot(t, ramp)
+    plt.title("Continuous-Time Ramp")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 4)
+    plt.plot(t, sinusoid)
+    plt.title("Continuous-Time Sinusoid")
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    t = -5:0.01:5;
+    dt = t(2)-t(1);
+
+    % Unit step
+    unit_step = double(t >= 0);
+
+    % Unit impulse approximation with area approximately equal to 1
+    unit_impulse = zeros(size(t));
+    zero_index = find(t == 0,1);
+    unit_impulse(zero_index) = 1/dt;
+
+    % Ramp
+    ramp = max(t,0);
+
+    % Periodic sinusoidal signal, frequency = 1 Hz
+    sinusoid = sin(2*pi*t);
+
+    figure;
+
+    subplot(4,1,1);
+    plot(t,unit_step);
+    title('Continuous-Time Unit Step');
+    grid on;
+
+    subplot(4,1,2);
+    plot(t,unit_impulse);
+    title('Unit Impulse Approximation');
+    grid on;
+
+    subplot(4,1,3);
+    plot(t,ramp);
+    title('Continuous-Time Ramp');
+    grid on;
+
+    subplot(4,1,4);
+    plot(t,sinusoid);
+    title('Continuous-Time Sinusoid');
+    grid on;
+
+================================================== EXPERIMENT 3 —
+DISCRETE-TIME BASIC SIGNALS
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    n = np.arange(-10, 11)
+
+    # Unit step
+    unit_step = (n >= 0).astype(int)
+
+    # Unit impulse
+    unit_impulse = (n == 0).astype(int)
+
+    # Ramp
+    ramp = np.maximum(n, 0)
+
+    # Discrete-time sinusoidal sequence
+    sinusoid = np.sin(0.2 * np.pi * n)
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(4, 1, 1)
+    plt.stem(n, unit_step)
+    plt.title("Discrete-Time Unit Step")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 2)
+    plt.stem(n, unit_impulse)
+    plt.title("Discrete-Time Unit Impulse")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 3)
+    plt.stem(n, ramp)
+    plt.title("Discrete-Time Ramp")
+    plt.grid(True)
+
+    plt.subplot(4, 1, 4)
+    plt.stem(n, sinusoid)
+    plt.title("Discrete-Time Sinusoidal Sequence")
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    n = -10:10;
+
+    % Unit step
+    unit_step = double(n >= 0);
+
+    % Unit impulse
+    unit_impulse = double(n == 0);
+
+    % Ramp
+    ramp = max(n,0);
+
+    % Discrete-time sinusoidal sequence
+    sinusoid = sin(0.2*pi*n);
+
+    figure;
+
+    subplot(4,1,1);
+    stem(n,unit_step);
+    title('Discrete-Time Unit Step');
+    grid on;
+
+    subplot(4,1,2);
+    stem(n,unit_impulse);
+    title('Discrete-Time Unit Impulse');
+    grid on;
+
+    subplot(4,1,3);
+    stem(n,ramp);
+    title('Discrete-Time Ramp');
+    grid on;
+
+    subplot(4,1,4);
+    stem(n,sinusoid);
+    title('Discrete-Time Sinusoidal Sequence');
+    grid on;
+
+================================================== EXPERIMENT 4 —
+OPERATIONS ON CONTINUOUS-TIME SIGNALS
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    t = np.linspace(-5, 5, 1000)
+
+    x1 = np.sin(t)
+    x2 = np.cos(t)
+
+    # Addition, subtraction and multiplication
+    addition = x1 + x2
+    subtraction = x1 - x2
+    multiplication = x1 * x2
+
+    # Amplitude scaling and time scaling
+    amplitude_scaling = 3 * x1
+    time_scaling = np.sin(2 * t)
+
+    # Even and odd components of x1(t)
+    x_reversed = np.sin(-t)
+    even_component = (x1 + x_reversed) / 2
+    odd_component = (x1 - x_reversed) / 2
+
+    signals = [
+        addition,
+        subtraction,
+        multiplication,
+        amplitude_scaling,
+        time_scaling,
+        even_component,
+        odd_component
+    ]
+
+    titles = [
+        "Addition",
+        "Subtraction",
+        "Multiplication",
+        "Amplitude Scaling: 3x1(t)",
+        "Time Compression: x1(2t)",
+        "Even Component",
+        "Odd Component"
+    ]
+
+    plt.figure(figsize=(10, 12))
+
+    for i in range(len(signals)):
+        plt.subplot(4, 2, i + 1)
+        plt.plot(t, signals[i])
+        plt.title(titles[i])
+        plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    t = -5:0.01:5;
+
+    x1 = sin(t);
+    x2 = cos(t);
+
+    % Addition, subtraction and multiplication
+    addition = x1 + x2;
+    subtraction = x1 - x2;
+    multiplication = x1.*x2;
+
+    % Amplitude scaling and time scaling
+    amplitude_scaling = 3*x1;
+    time_scaling = sin(2*t);
+
+    % Even and odd components of x1(t)
+    x_reversed = sin(-t);
+    even_component = (x1 + x_reversed)/2;
+    odd_component = (x1 - x_reversed)/2;
+
+    figure;
+
+    subplot(4,2,1);
+    plot(t,addition);
+    title('Addition');
+    grid on;
+
+    subplot(4,2,2);
+    plot(t,subtraction);
+    title('Subtraction');
+    grid on;
+
+    subplot(4,2,3);
+    plot(t,multiplication);
+    title('Multiplication');
+    grid on;
+
+    subplot(4,2,4);
+    plot(t,amplitude_scaling);
+    title('Amplitude Scaling: 3x1(t)');
+    grid on;
+
+    subplot(4,2,5);
+    plot(t,time_scaling);
+    title('Time Compression: x1(2t)');
+    grid on;
+
+    subplot(4,2,6);
+    plot(t,even_component);
+    title('Even Component');
+    grid on;
+
+    subplot(4,2,7);
+    plot(t,odd_component);
+    title('Odd Component');
+    grid on;
+
+================================================== EXPERIMENT 5 —
+VERIFICATION OF SYSTEM PROPERTIES
+==================================================
+
+PYTHON
+
+    import numpy as np
+
+    n = np.arange(-5, 6)
+    x = np.sin(n)
+
+    # Example causal system: y[n] = x[n] + x[n-1]
+    def causal_system(signal):
+        return signal + np.concatenate(([0], signal[:-1]))
+
+    # Example non-causal system: y[n] = x[n+1]
+    def noncausal_system(signal):
+        return np.concatenate((signal[1:], [0]))
+
+    # Memoryless system: y[n] = 2x[n]
+    def memoryless_system(signal):
+        return 2 * signal
+
+    # Dynamic system: y[n] = x[n] + x[n-1]
+    def dynamic_system(signal):
+        return signal + np.concatenate(([0], signal[:-1]))
+
+    # Linear system: y[n] = 2x[n]
+    def linear_system(signal):
+        return 2 * signal
+
+    # Nonlinear system: y[n] = x[n]^2
+    def nonlinear_system(signal):
+        return signal**2
+
+    # Time-invariant system: y[n] = 2x[n]
+    def time_invariant_system(signal):
+        return 2 * signal
+
+    # Time-variant system: y[n] = n*x[n]
+    def time_variant_system(signal):
+        return n * signal
+
+    print("Causal system output:")
+    print(causal_system(x))
+
+    print("Non-causal system output:")
+    print(noncausal_system(x))
+
+    print("Memoryless system output:")
+    print(memoryless_system(x))
+
+    print("Dynamic system output:")
+    print(dynamic_system(x))
+
+    print("Linear system output:")
+    print(linear_system(x))
+
+    print("Nonlinear system output:")
+    print(nonlinear_system(x))
+
+    print("Time-invariant system output:")
+    print(time_invariant_system(x))
+
+    print("Time-variant system output:")
+    print(time_variant_system(x))
+
+    # Test linearity for T(x) = 2x
+    x1 = np.array([1.0, 2.0, 3.0])
+    x2 = np.array([2.0, 1.0, 4.0])
+    a = 2.0
+    b = 3.0
+
+    left_side = linear_system(a*x1 + b*x2)
+    right_side = a*linear_system(x1) + b*linear_system(x2)
+
+    print("Linearity test passed:", np.allclose(left_side, right_side))
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    n = -5:5;
+    x = sin(n);
+
+    % Causal system: y[n] = x[n] + x[n-1]
+    causal_output = x + [0 x(1:end-1)];
+
+    % Non-causal system: y[n] = x[n+1]
+    noncausal_output = [x(2:end) 0];
+
+    % Memoryless system: y[n] = 2x[n]
+    memoryless_output = 2*x;
+
+    % Dynamic system: y[n] = x[n] + x[n-1]
+    dynamic_output = x + [0 x(1:end-1)];
+
+    % Linear system: y[n] = 2x[n]
+    linear_output = 2*x;
+
+    % Nonlinear system: y[n] = x[n]^2
+    nonlinear_output = x.^2;
+
+    % Time-invariant system: y[n] = 2x[n]
+    time_invariant_output = 2*x;
+
+    % Time-variant system: y[n] = n*x[n]
+    time_variant_output = n.*x;
+
+    disp('Causal system output:');
+    disp(causal_output);
+
+    disp('Non-causal system output:');
+    disp(noncausal_output);
+
+    disp('Memoryless system output:');
+    disp(memoryless_output);
+
+    disp('Dynamic system output:');
+    disp(dynamic_output);
+
+    disp('Linear system output:');
+    disp(linear_output);
+
+    disp('Nonlinear system output:');
+    disp(nonlinear_output);
+
+    disp('Time-invariant system output:');
+    disp(time_invariant_output);
+
+    disp('Time-variant system output:');
+    disp(time_variant_output);
+
+    % Test linearity for T(x) = 2x
+    x1 = [1 2 3];
+    x2 = [2 1 4];
+    a = 2;
+    b = 3;
+
+    left_side = 2*(a*x1 + b*x2);
+    right_side = a*(2*x1) + b*(2*x2);
+
+    disp('Linearity test passed:');
+    disp(isequal(left_side,right_side));
+
+================================================== EXPERIMENT 6 —
+CONTINUOUS-TIME CONVOLUTION
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    dt = 0.01
+    t = np.arange(0, 10, dt)
+
+    # Input signals, both zero for negative time
+    x1 = np.exp(-t)
+    x2 = np.exp(-2*t)
+
+    # Numerical approximation to continuous-time convolution
+    y = np.convolve(x1, x2) * dt
+
+    # Time axis for convolution output
+    ty = np.arange(len(y)) * dt
+
+    # Analytical result is valid for 0 <= t <= 10
+    analytical = np.exp(-ty) - np.exp(-2*ty)
+    valid = ty <= 10
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(3, 1, 1)
+    plt.plot(t, x1)
+    plt.title("First Input: x1(t) = exp(-t)")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 2)
+    plt.plot(t, x2)
+    plt.title("Second Input: x2(t) = exp(-2t)")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.plot(ty, y, label="Numerical convolution")
+    plt.plot(ty[valid], analytical[valid], "--", label="Analytical result")
+    plt.title("Continuous-Time Convolution")
+    plt.xlabel("Time (s)")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    dt = 0.01;
+    t = 0:dt:10-dt;
+
+    % Input signals
+    x1 = exp(-t);
+    x2 = exp(-2*t);
+
+    % Numerical approximation to continuous-time convolution
+    y = conv(x1,x2)*dt;
+
+    % Time axis for convolution output
+    ty = (0:length(y)-1)*dt;
+
+    % Analytical result is valid for 0 <= t <= 10
+    analytical = exp(-ty)-exp(-2*ty);
+    valid = ty <= 10;
+
+    figure;
+
+    subplot(3,1,1);
+    plot(t,x1);
+    title('First Input: x1(t) = exp(-t)');
+    grid on;
+
+    subplot(3,1,2);
+    plot(t,x2);
+    title('Second Input: x2(t) = exp(-2t)');
+    grid on;
+
+    subplot(3,1,3);
+    plot(ty,y);
+    hold on;
+    plot(ty(valid),analytical(valid),'--');
+    title('Continuous-Time Convolution');
+    xlabel('Time (s)');
+    legend('Numerical convolution','Analytical result');
+    grid on;
+
+================================================== EXPERIMENT 7 —
+DISCRETE-TIME CONVOLUTION
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Input sequences
+    x1 = np.array([1, 2, 1])
+    x2 = np.array([1, 1, 1])
+
+    # Discrete-time convolution
+    y = np.convolve(x1, x2)
+
+    # Sample indices
+    n1 = np.arange(len(x1))
+    n2 = np.arange(len(x2))
+    ny = np.arange(len(y))
+
+    plt.figure(figsize=(10, 7))
+
+    plt.subplot(3, 1, 1)
+    plt.stem(n1, x1)
+    plt.title("First Input Sequence")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 2)
+    plt.stem(n2, x2)
+    plt.title("Second Input Sequence")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.stem(ny, y)
+    plt.title("Convolution Output")
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+    print("Convolution result:", y)
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    % Input sequences
+    x1 = [1 2 1];
+    x2 = [1 1 1];
+
+    % Discrete-time convolution
+    y = conv(x1,x2);
+
+    % Sample indices
+    n1 = 0:length(x1)-1;
+    n2 = 0:length(x2)-1;
+    ny = 0:length(y)-1;
+
+    figure;
+
+    subplot(3,1,1);
+    stem(n1,x1);
+    title('First Input Sequence');
+    grid on;
+
+    subplot(3,1,2);
+    stem(n2,x2);
+    title('Second Input Sequence');
+    grid on;
+
+    subplot(3,1,3);
+    stem(ny,y);
+    title('Convolution Output');
+    grid on;
+
+    disp('Convolution result:');
+    disp(y);
+
+================================================== EXPERIMENT 8 —
+TIME-DOMAIN AND FREQUENCY-DOMAIN
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    Fs = 100
+    t = np.arange(0, 1, 1/Fs)
+
+    # Signal contains 5 Hz and 10 Hz components
+    x = np.sin(2*np.pi*5*t) + 0.5*np.sin(2*np.pi*10*t)
+
+    # Calculate FFT
+    N = len(x)
+    X = np.fft.fft(x)
+
+    # Positive frequency axis and spectrum
+    frequency = np.fft.rfftfreq(N, d=1/Fs)
+    spectrum = np.abs(np.fft.rfft(x))/N
+
+    # Convert to one-sided amplitude spectrum
+    if N % 2 == 0:
+        spectrum[1:-1] *= 2
+    else:
+        spectrum[1:] *= 2
+
+    plt.figure(figsize=(10, 7))
+
+    plt.subplot(2, 1, 1)
+    plt.plot(t, x)
+    plt.title("Time-Domain Signal")
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+    plt.subplot(2, 1, 2)
+    plt.stem(frequency, spectrum)
+    plt.title("One-Sided Amplitude Spectrum")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Magnitude")
+    plt.xlim(0, Fs/2)
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    Fs = 100;
+    t = 0:1/Fs:1-1/Fs;
+
+    % Signal contains 5 Hz and 10 Hz components
+    x = sin(2*pi*5*t) + 0.5*sin(2*pi*10*t);
+
+    % Calculate FFT
+    N = length(x);
+    X = fft(x);
+
+    % Positive frequency axis
+    frequency = (0:floor(N/2))*Fs/N;
+
+    % One-sided amplitude spectrum
+    spectrum = abs(X(1:floor(N/2)+1))/N;
+
+    if mod(N,2) == 0
+        spectrum(2:end-1) = 2*spectrum(2:end-1);
+    else
+        spectrum(2:end) = 2*spectrum(2:end);
+    end
+
+    figure;
+
+    subplot(2,1,1);
+    plot(t,x);
+    title('Time-Domain Signal');
+    xlabel('Time (seconds)');
+    ylabel('Amplitude');
+    grid on;
+
+    subplot(2,1,2);
+    stem(frequency,spectrum);
+    title('One-Sided Amplitude Spectrum');
+    xlabel('Frequency (Hz)');
+    ylabel('Magnitude');
+    xlim([0 Fs/2]);
+    grid on;
+
+================================================== EXPERIMENT 9 —
+FOURIER TRANSFORM OF A SQUARE PULSE
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    A = 1
+    T = 2
+
+    # Rectangular pulse in time domain
+    t = np.linspace(-3, 3, 1001)
+    x = A * (np.abs(t) <= T/2)
+
+    # Analytical Fourier transform
+    frequency = np.linspace(-5, 5, 2001)
+    X = A*T*np.sinc(frequency*T)
+
+    # Amplitude and phase spectra
+    amplitude = np.abs(X)
+    phase = np.angle(X)
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(3, 1, 1)
+    plt.plot(t, x)
+    plt.title("Rectangular Square Pulse")
+    plt.xlabel("Time (seconds)")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 2)
+    plt.plot(frequency, amplitude)
+    plt.title("Amplitude Spectrum")
+    plt.xlabel("Frequency (Hz)")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.plot(frequency, phase)
+    plt.title("Phase Spectrum")
+    plt.xlabel("Frequency (Hz)")
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    A = 1;
+    T = 2;
+
+    % Rectangular pulse in time domain
+    t = -3:0.01:3;
+    x = A*double(abs(t) <= T/2);
+
+    % Analytical Fourier transform
+    frequency = -5:0.005:5;
+    X = A*T*sinc(frequency*T);
+
+    % Amplitude and phase spectra
+    amplitude = abs(X);
+    phase = angle(X);
+
+    figure;
+
+    subplot(3,1,1);
+    plot(t,x);
+    title('Rectangular Square Pulse');
+    xlabel('Time (seconds)');
+    grid on;
+
+    subplot(3,1,2);
+    plot(frequency,amplitude);
+    title('Amplitude Spectrum');
+    xlabel('Frequency (Hz)');
+    grid on;
+
+    subplot(3,1,3);
+    plot(frequency,phase);
+    title('Phase Spectrum');
+    xlabel('Frequency (Hz)');
+    grid on;
+
+================================================== EXPERIMENT 10 —
+SAMPLING AND ALIASING ==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    signal_frequency = 50
+
+    # High-resolution original signal
+    t = np.linspace(0, 0.1, 2000)
+    original = np.sin(2*np.pi*signal_frequency*t)
+
+    # Sampling above Nyquist rate
+    Fs_good = 200
+    t_good = np.arange(0, 0.1, 1/Fs_good)
+    x_good = np.sin(2*np.pi*signal_frequency*t_good)
+
+    # Sampling below Nyquist rate
+    Fs_low = 80
+    t_low = np.arange(0, 0.1, 1/Fs_low)
+    x_low = np.sin(2*np.pi*signal_frequency*t_low)
+
+    # Aliased frequency: |50 - 80| = 30 Hz
+    # The sampled points correspond to a negative 30 Hz sinusoid
+    alias = -np.sin(2*np.pi*30*t)
+
+    plt.figure(figsize=(10, 8))
+
+    plt.subplot(3, 1, 1)
+    plt.plot(t, original)
+    plt.title("Original 50 Hz Signal")
+    plt.grid(True)
+
+    plt.subplot(3, 1, 2)
+    plt.plot(t, original, label="Original signal")
+    plt.stem(t_good, x_good, linefmt="C1-", markerfmt="C1o", basefmt=" ")
+    plt.title("Sampling at 200 Hz: Above Nyquist Rate")
+    plt.legend()
+    plt.grid(True)
+
+    plt.subplot(3, 1, 3)
+    plt.plot(t, original, label="Original 50 Hz")
+    plt.plot(t, alias, "--", label="Aliased -30 Hz")
+    plt.stem(t_low, x_low, linefmt="C2-", markerfmt="C2o", basefmt=" ")
+    plt.title("Sampling at 80 Hz: Aliasing")
+    plt.legend()
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    signal_frequency = 50;
+
+    % High-resolution original signal
+    t = linspace(0,0.1,2000);
+    original = sin(2*pi*signal_frequency*t);
+
+    % Sampling above Nyquist rate
+    Fs_good = 200;
+    t_good = 0:1/Fs_good:0.1-1/Fs_good;
+    x_good = sin(2*pi*signal_frequency*t_good);
+
+    % Sampling below Nyquist rate
+    Fs_low = 80;
+    t_low = 0:1/Fs_low:0.1-1/Fs_low;
+    x_low = sin(2*pi*signal_frequency*t_low);
+
+    % Aliased frequency: |50 - 80| = 30 Hz
+    alias = -sin(2*pi*30*t);
+
+    figure;
+
+    subplot(3,1,1);
+    plot(t,original);
+    title('Original 50 Hz Signal');
+    grid on;
+
+    subplot(3,1,2);
+    plot(t,original);
+    hold on;
+    stem(t_good,x_good);
+    title('Sampling at 200 Hz: Above Nyquist Rate');
+    legend('Original signal','Samples');
+    grid on;
+
+    subplot(3,1,3);
+    plot(t,original);
+    hold on;
+    plot(t,alias,'--');
+    stem(t_low,x_low);
+    title('Sampling at 80 Hz: Aliasing');
+    legend('Original 50 Hz','Aliased -30 Hz','Samples');
+    grid on;
+
+================================================== EXPERIMENT 11 — DFT
+AND POWER SPECTRAL DENSITY
+==================================================
+
+PYTHON
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    Fs = 1000
+
+    # Include both t = 0 and t = 10
+    t = np.arange(0, 10 + 1/Fs, 1/Fs)
+
+    # Given signal
+    x = np.cos(2*np.pi*47*t) + np.cos(2*np.pi*219*t)
+
+    # DFT
+    N = len(x)
+    X = np.fft.fft(x)
+
+    # One-sided frequency axis
+    frequency = np.fft.rfftfreq(N, d=1/Fs)
+
+    # One-sided power spectral density (periodogram)
+    P = np.abs(np.fft.rfft(x))**2 / (Fs*N)
+
+    # Double positive-frequency bins, excluding DC.
+    # N is odd here, so there is no Nyquist bin.
+    P[1:] = 2*P[1:]
+
+    plt.figure(figsize=(10, 7))
+
+    plt.subplot(2, 1, 1)
+    plt.plot(t, x)
+    plt.title("Sampled Signal")
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Amplitude")
+    plt.grid(True)
+
+    plt.subplot(2, 1, 2)
+    plt.plot(frequency, P)
+    plt.title("One-Sided Power Spectral Density")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Power/Hz")
+    plt.xlim(0, 300)
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+    print("Sampling frequency:", Fs, "Hz")
+    print("Number of samples:", N)
+    print("Frequency resolution:", Fs/N, "Hz")
+    print("Expected frequency components: 47 Hz and 219 Hz")
+
+MATLAB
+
+    clc;
+    clear;
+    close all;
+
+    Fs = 1000;
+
+    % Include both t = 0 and t = 10
+    t = 0:1/Fs:10;
+
+    % Given signal
+    x = cos(2*pi*47*t) + cos(2*pi*219*t);
+
+    % DFT
+    N = length(x);
+    X = fft(x);
+
+    % One-sided frequency axis
+    frequency = (0:floor(N/2))*Fs/N;
+
+    % One-sided power spectral density (periodogram)
+    P = abs(X(1:floor(N/2)+1)).^2/(Fs*N);
+
+    % N is odd here, so double all positive-frequency bins
+    % except DC. There is no Nyquist bin.
+    P(2:end) = 2*P(2:end);
+
+    figure;
+
+    subplot(2,1,1);
+    plot(t,x);
+    title('Sampled Signal');
+    xlabel('Time (seconds)');
+    ylabel('Amplitude');
+    grid on;
+
+    subplot(2,1,2);
+    plot(frequency,P);
+    title('One-Sided Power Spectral Density');
+    xlabel('Frequency (Hz)');
+    ylabel('Power/Hz');
+    xlim([0 300]);
+    grid on;
+
+    disp('Sampling frequency (Hz):');
+    disp(Fs);
+
+    disp('Number of samples:');
+    disp(N);
+
+    disp('Frequency resolution (Hz):');
+    disp(Fs/N);
+
+    disp('Expected frequency components: 47 Hz and 219 Hz');
